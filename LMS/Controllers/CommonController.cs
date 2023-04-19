@@ -29,7 +29,13 @@ namespace LMS.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetDepartments()
         {            
-            return Json(null);
+            var departments = _db.Departments.Select(d => new
+            {
+                name = d.Name,
+                subject = d.Subject
+            }).ToList();
+
+            return Json(departments);
         }
 
 
@@ -47,7 +53,18 @@ namespace LMS.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetCatalog()
         {            
-            return Json(null);
+            var catalog = _db.Departments.Select(d => new
+            {
+                subject = d.Subject,
+                dname = d.Name,
+                courses = d.Courses.Select(c => new
+                {
+                    number = c.Number,
+                    cname = c.Name
+                }).ToList()
+            }).ToList();
+
+            return Json(catalog);
         }
 
         /// <summary>
@@ -66,7 +83,23 @@ namespace LMS.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetClassOfferings(string subject, int number)
         {            
-            return Json(null);
+             var classOfferings = _db.Classes
+                .Include(c => c.Course)
+                .ThenInclude(co => co.Department)
+                .Include(c => c.Professor)
+                .Where(c => c.Course.Department.Subject == subject && c.Course.Number == number)
+                .Select(c => new
+                {
+                    season = c.Semester,
+                    year = c.Year,
+                    location = c.Location,
+                    start = c.StartTime.ToString(@"hh\:mm\:ss"),
+                    end = c.EndTime.ToString(@"hh\:mm\:ss"),
+                    fname = c.Professor.FirstName,
+                    lname = c.Professor.LastName
+                }).ToList();
+
+            return Json(classOfferings);
         }
 
         /// <summary>
@@ -83,7 +116,20 @@ namespace LMS.Controllers
         /// <returns>The assignment contents</returns>
         public IActionResult GetAssignmentContents(string subject, int num, string season, int year, string category, string asgname)
         {            
-            return Content("");
+             var assignment = _db.Assignments
+                .Include(a => a.Class)
+                .ThenInclude(c => c.Course)
+                .ThenInclude(co => co.Department)
+                .Where(a => a.Class.Course.Department.Subject == subject &&
+                            a.Class.Course.Number == num &&
+                            a.Class.Semester == season &&
+                            a.Class.Year == year &&
+                            a.Category == category &&
+                            a.Name == asgname)
+                .Select(a => a.Contents)
+                .FirstOrDefault();
+
+            return Content(assignment ?? "");
         }
 
 
@@ -103,7 +149,23 @@ namespace LMS.Controllers
         /// <returns>The submission text</returns>
         public IActionResult GetSubmissionText(string subject, int num, string season, int year, string category, string asgname, string uid)
         {            
-            return Content("");
+
+    var submission = _db.Submissions
+        .Include(s => s.Assignment)
+        .ThenInclude(a => a.Class)
+        .ThenInclude(c => c.Course)
+        .ThenInclude(co => co.Department)
+        .Where(s => s.Assignment.Class.Course.Department.Subject == subject &&
+                    s.Assignment.Class.Course.Number == num &&
+                    s.Assignment.Class.Semester == season &&
+                    s.Assignment.Class.Year == year &&
+                    s.Assignment.Category == category &&
+                    s.Assignment.Name == asgname &&
+                    s.StudentId == uid)
+        .Select(s => s.Contents)
+        .FirstOrDefault();
+
+    return Content(submission ?? "");
         }
 
 
@@ -125,7 +187,59 @@ namespace LMS.Controllers
         /// </returns>
         public IActionResult GetUser(string uid)
         {           
-            return Json(new { success = false });
+            //Create a professor instance to test for professor. 
+             var professor = _db.Professors
+        .Include(p => p.Department)
+        .Where(p => p.UId == uid)
+        .Select(p => new
+        {
+            fname = p.FirstName,
+            lname = p.LastName,
+            uid = p.UId,
+            department = p.Department.Name
+        })
+        .FirstOrDefault();
+
+    if (professor != null)
+    {
+        return Json(professor);
+    }
+
+    //Create a student instance to test for student.
+    var student = _db.Students
+        .Include(s => s.Department)
+        .Where(s => s.UId == uid)
+        .Select(s => new
+        {
+            fname = s.FirstName,
+            lname = s.LastName,
+            uid = s.UId,
+            department = s.Department.Name
+        })
+        .FirstOrDefault();
+
+    if (student != null)
+    {
+        return Json(student);
+    }
+
+     //Create a administrator instance to test for administrator.
+    var administrator = _db.Administrators
+        .Where(a => a.UId == uid)
+        .Select(a => new
+        {
+            fname = a.FirstName,
+            lname = a.LastName,
+            uid = a.UId
+        })
+        .FirstOrDefault();
+
+    if (administrator != null)
+    {
+        return Json(administrator);
+    }
+
+    return Json(new { success = false });
         }
 
 

@@ -194,7 +194,34 @@ namespace LMS.Areas.Identity.Pages.Account
         /// <returns>The uID of the new user</returns>
         string CreateNewUser( string firstName, string lastName, DateTime DOB, string departmentAbbrev, string role )
         {
-            return "unknown";
+        //Generate a unique uID
+        Random random = new Random();
+        string uID;
+        do
+        {
+            uID = "u" + random.Next(1000000, 10000000);
+        } while (UserExists(uID)); // Checks if a user with the given uID exists in the database
+
+        //Create a new User object
+        User newUser = new User
+        {
+            uID = uID,
+            FirstName = firstName,
+            LastName = lastName,
+            DateOfBirth = DOB,
+            DepartmentAbbrev = role == "Administrator" ? "" : departmentAbbrev,
+            Role = role
+        };
+
+        //Add the new User object to the database
+        bool added = AddUserToDatabase(newUser);
+        if (!added)
+        {
+            throw new Exception("Failed to add the user to the database.");
+        }
+
+        // Step 4: Return the uID of the new user
+        return uID;
         }
 
         /*******End code to modify********/
