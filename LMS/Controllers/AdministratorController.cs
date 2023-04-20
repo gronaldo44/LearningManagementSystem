@@ -50,7 +50,18 @@ namespace LMS.Controllers
         public IActionResult CreateDepartment(string subject, string name)
         {
             
-            return Json(new { success = false});
+              var existingDepartment = _db.Departments.FirstOrDefault(d => d.Subject == subject);
+
+    if (existingDepartment != null)
+    {
+        return Json(new { success = false });
+    }
+
+    var newDepartment = new Department { Subject = subject, Name = name };
+    _db.Departments.Add(newDepartment);
+    _db.SaveChanges();
+
+    return Json(new { success = true });
         }
 
 
@@ -65,7 +76,16 @@ namespace LMS.Controllers
         public IActionResult GetCourses(string subject)
         {
             
-            return Json(null);
+             var courses = _db.Courses
+        .Where(c => c.Department.Subject == subject)
+        .Select(c => new
+        {
+            number = c.Number,
+            name = c.Name
+        })
+        .ToList();
+
+    return Json(courses);
         }
 
         /// <summary>
@@ -80,7 +100,17 @@ namespace LMS.Controllers
         public IActionResult GetProfessors(string subject)
         {
             
-            return Json(null);
+           var professors = _db.Professors
+        .Where(p => p.Department.Subject == subject)
+        .Select(p => new
+        {
+            lname = p.LastName,
+            fname = p.FirstName,
+            uid = p.UId
+        })
+        .ToList();
+
+    return Json(professors);
             
         }
 
@@ -97,7 +127,24 @@ namespace LMS.Controllers
         /// false if the course already exists, true otherwise.</returns>
         public IActionResult CreateCourse(string subject, int number, string name)
         {           
-            return Json(new { success = false });
+          var existingCourse = _db.Courses.FirstOrDefault(c => c.Department.Subject == subject && c.Number == number);
+
+    if (existingCourse != null)
+    {
+        return Json(new { success = false });
+    }
+
+    var department = _db.Departments.FirstOrDefault(d => d.Subject == subject);
+    if (department == null)
+    {
+        return Json(new { success = false });
+    }
+
+    var newCourse = new Course { Department = department, Number = number, Name = name };
+    _db.Courses.Add(newCourse);
+    _db.SaveChanges();
+
+    return Json(new { success = true });
         }
 
 
@@ -120,7 +167,42 @@ namespace LMS.Controllers
         /// true otherwise.</returns>
         public IActionResult CreateClass(string subject, int number, string season, int year, DateTime start, DateTime end, string location, string instructor)
         {            
-            return Json(new { success = false});
+            var existingClass = _db.Classes
+        .Include(c => c.Course)
+        .Where(c => c.Course.Department.Subject == subject &&
+                    c.Course.Number == number &&
+                    c.Semester == season &&
+                    c.Year == year)
+        .Any();
+
+    if (existingClass)
+    {
+        return Json(new { success = false });
+    }
+
+    var course = _db.Courses.FirstOrDefault(c => c.Department.Subject == subject && c.Number == number);
+    var professor = _db.Professors.FirstOrDefault(p => p.UId == instructor);
+
+    if (course == null || professor == null)
+    {
+        return Json(new { success = false });
+    }
+
+    var newClass = new Class
+    {
+        Course = course,
+        Semester = season,
+        Year = year,
+        StartTime = start.TimeOfDay,
+        EndTime = end.TimeOfDay,
+        Location = location,
+        Professor = professor
+    };
+
+    _db.Classes.Add(newClass);
+    _db.SaveChanges();
+
+    return Json(new { success = true });
         }
 
 
