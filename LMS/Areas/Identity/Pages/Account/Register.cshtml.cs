@@ -79,7 +79,7 @@ namespace LMS.Areas.Identity.Pages.Account
         {
 
             [Required]
-            [Display( Name = "Role" )]
+            [Display(Name = "Role")]
             public string Role { get; set; }
 
             public List<SelectListItem> Roles { get; } = new List<SelectListItem>
@@ -97,68 +97,68 @@ namespace LMS.Areas.Identity.Pages.Account
             };
 
             [Required]
-            [Display( Name = "First Name" )]
+            [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
             [Required]
-            [Display( Name = "Last Name" )]
+            [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
             [Required]
-            [Display( Name = "Date of Birth" )]
-            [BindProperty, DisplayFormat( DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true )]
-            [DataType( DataType.Date )]
+            [Display(Name = "Date of Birth")]
+            [BindProperty, DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+            [DataType(DataType.Date)]
             public System.DateTime DOB { get; set; } = DateTime.Now;
 
             [Required]
             //[StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-            [DataType( DataType.Password )]
-            [Display( Name = "Password" )]
+            [DataType(DataType.Password)]
+            [Display(Name = "Password")]
             public string Password { get; set; }
 
-            [DataType( DataType.Password )]
-            [Display( Name = "Confirm password" )]
-            [Compare( "Password", ErrorMessage = "The password and confirmation password do not match." )]
+            [DataType(DataType.Password)]
+            [Display(Name = "Confirm password")]
+            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
         }
 
 
-        public async Task OnGetAsync( string returnUrl = null )
+        public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-            ExternalLogins = ( await _signInManager.GetExternalAuthenticationSchemesAsync() ).ToList();
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
 
 
         }
 
-        public async Task<IActionResult> OnPostAsync( string returnUrl = null )
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content( "~/" );
-            ExternalLogins = ( await _signInManager.GetExternalAuthenticationSchemesAsync() ).ToList();
-            if ( ModelState.IsValid )
+            returnUrl ??= Url.Content("~/");
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            if (ModelState.IsValid)
             {
                 var uid = CreateNewUser(Input.FirstName, Input.LastName, Input.DOB, Input.Department, Input.Role);
                 var user = new ApplicationUser { UserName = uid };
 
-                await _userStore.SetUserNameAsync( user, uid, CancellationToken.None );
+                await _userStore.SetUserNameAsync(user, uid, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
-                if ( result.Succeeded )
+                if (result.Succeeded)
                 {
-                    _logger.LogInformation( "User created a new account with password." );
-                    await _userManager.AddToRoleAsync( user, Input.Role );
+                    _logger.LogInformation("User created a new account with password.");
+                    await _userManager.AddToRoleAsync(user, Input.Role);
 
                     var userId = await _userManager.GetUserIdAsync(user);
 
-                    await _signInManager.SignInAsync( user, isPersistent: false );
-                    return LocalRedirect( returnUrl );
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
 
                 }
-                foreach ( var error in result.Errors )
+                foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError( string.Empty, error.Description );
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
@@ -174,13 +174,30 @@ namespace LMS.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException( $"Can't create an instance of '{nameof( ApplicationUser )}'. " +
-                    $"Ensure that '{nameof( IdentityUser )}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml" );
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
         /*******Begin code to modify********/
+
+        /// <summary>
+        /// Represents a user for this application.
+        /// </summary>
+        private struct userStruct
+        {
+            public string UId { get; set; } = null!;
+            public string FName { get; set; } = null!;
+            public string LName { get; set; } = null!;
+            public DateOnly Dob { get; set; }
+            public string Department { get; set; } = null!;
+            public string Role { get; set; } = null!;
+
+            public userStruct()
+            {
+            }
+        }
 
         /// <summary>
         /// Create a new user of the LMS with the specified information and add it to the database.
@@ -192,36 +209,108 @@ namespace LMS.Areas.Identity.Pages.Account
         /// <param name="departmentAbbrev">The department abbreviation that the user belongs to (ignore for Admins) </param>
         /// <param name="role">The user's role: one of "Administrator", "Professor", "Student"</param>
         /// <returns>The uID of the new user</returns>
-        string CreateNewUser( string firstName, string lastName, DateTime DOB, string departmentAbbrev, string role )
+        string CreateNewUser(string firstName, string lastName, DateTime DOB, string departmentAbbrev, string role)
         {
-        //Generate a unique uID
-        Random random = new Random();
-        string uID;
-        do
-        {
-            uID = "u" + random.Next(1000000, 10000000);
-        } while (UserExists(uID)); // Checks if a user with the given uID exists in the database
+            //Generate a unique uID
+            Random random = new Random();
+            string uID;
+            do
+            {
+                uID = "u" + random.Next(1000000, 10000000);
+            } while (UserExists(uID)); // Checks if a user with the given uID exists in the database
 
-        //Create a new User object
-        User newUser = new User
-        {
-            uID = uID,
-            FirstName = firstName,
-            LastName = lastName,
-            DateOfBirth = DOB,
-            DepartmentAbbrev = role == "Administrator" ? "" : departmentAbbrev,
-            Role = role
-        };
+            //Create a new User object
+            userStruct newUser = new userStruct
+            {
+                UId = uID,
+                FName = firstName,
+                LName = lastName,
+                Dob = DateOnly.FromDateTime(DOB),
+                Department = departmentAbbrev,
+                Role = role
+            };
 
-        //Add the new User object to the database
-        bool added = AddUserToDatabase(newUser);
-        if (!added)
-        {
-            throw new Exception("Failed to add the user to the database.");
+            //Add the new User object to the database
+            AddNewApplicationUser(newUser);
+            return uID;
         }
 
-        // Step 4: Return the uID of the new user
-        return uID;
+        /// <summary>
+        /// Adds a new application user to the database
+        /// </summary>
+        /// <param name="user">new application user being added to the database</param>
+        /// <exception cref="ArgumentException">throws if the user has an invalid role</exception>
+        private void AddNewApplicationUser(userStruct user)
+        {
+            if (user.Role == "Administrator")
+            {
+                var newAdmin = new Administrator
+                {
+                    UId = user.UId,
+                    Fname = user.FName,
+                    Lname = user.LName,
+                    Dob = user.Dob
+                };
+                db.Administrators.Add(newAdmin);
+            }
+            else if (user.Role == "Professor")
+            {
+                var newProf = new Professor
+                {
+                    UId = user.UId,
+                    FName = user.FName,
+                    LName = user.LName,
+                    Dob = user.Dob,
+                    WorksIn = user.Department
+                };
+                db.Professors.Add(newProf);
+            }
+            else if (user.Role == "Student")
+            {
+                var newStud = new Student
+                {
+                    UId = user.UId,
+                    Fname = user.FName,
+                    Lname = user.LName,
+                    Dob = user.Dob,
+                    Major = user.Department
+                };
+                db.Students.Add(newStud);
+            }
+            else
+            {
+                throw new ArgumentException("Invalid user Role");
+            }
+            db.SaveChanges();
+        }
+
+        /// <summary>
+        /// Checks the database for anyone with the argued uID
+        /// </summary>
+        /// <param name="uID"></param>
+        /// <returns>Whether somone already has that uID</returns>
+        private bool UserExists(string uID)
+        {
+            // Check if a professor already has that uid
+            bool userExists = (from p in db.Professors where p.UId == uID select p).Any();
+            if (userExists)
+            {
+                return true;
+            }
+            // Check if an administrator already has that uid
+            userExists = (from a in db.Administrators where a.UId == uID select a).Any();
+            if (userExists)
+            {
+                return true;
+            }
+            // Check if a student already has that uid
+            userExists = (from s in db.Students where s.UId == uID select s).Any();
+            if (userExists)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /*******End code to modify********/

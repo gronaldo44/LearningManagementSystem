@@ -12,11 +12,11 @@ namespace LMS.Controllers
 {
     public class CommonController : Controller
     {
-        private readonly LMSContext db;
+        private readonly LMSContext _db;
 
         public CommonController(LMSContext _db)
         {
-            db = _db;
+            this._db = _db;
         }
 
         /*******Begin code to modify********/
@@ -28,7 +28,7 @@ namespace LMS.Controllers
         /// </summary>
         /// <returns>The JSON array</returns>
         public IActionResult GetDepartments()
-        {            
+        {
             var departments = _db.Departments.Select(d => new
             {
                 name = d.Name,
@@ -52,14 +52,14 @@ namespace LMS.Controllers
         /// </summary>
         /// <returns>The JSON array</returns>
         public IActionResult GetCatalog()
-        {            
+        {
             var catalog = _db.Departments.Select(d => new
             {
                 subject = d.Subject,
                 dname = d.Name,
                 courses = d.Courses.Select(c => new
                 {
-                    number = c.Number,
+                    number = c.CNum,
                     cname = c.Name
                 }).ToList()
             }).ToList();
@@ -82,22 +82,25 @@ namespace LMS.Controllers
         /// <param name="number">The course number, as in 5530</param>
         /// <returns>The JSON array</returns>
         public IActionResult GetClassOfferings(string subject, int number)
-        {            
-             var classOfferings = _db.Classes
-                .Include(c => c.Course)
-                .ThenInclude(co => co.Department)
-                .Include(c => c.Professor)
-                .Where(c => c.Course.Department.Subject == subject && c.Course.Number == number)
-                .Select(c => new
-                {
-                    season = c.Semester,
-                    year = c.Year,
-                    location = c.Location,
-                    start = c.StartTime.ToString(@"hh\:mm\:ss"),
-                    end = c.EndTime.ToString(@"hh\:mm\:ss"),
-                    fname = c.Professor.FirstName,
-                    lname = c.Professor.LastName
-                }).ToList();
+        {
+            var classOfferings = from courses in _db.Courses.
+                                 Where(c => c.CNum == number && subject == c.Subject)
+                                 join classes in _db.Classes
+                                 on courses.CId equals classes.CId into courses_classes
+                                 from courses_classes_ in courses_classes.DefaultIfEmpty()
+                                 join courses_classes_professors in _db.Professors
+                                 on courses_classes_.TaughtBy equals courses_classes_professors.UId into courses_classes_professors
+                                 from courses_classes_professors_ in courses_classes_professors.DefaultIfEmpty()
+                                 select new
+                                 {
+                                     season = courses_classes_.Season,
+                                     year = courses_classes_.Year,
+                                     location = courses_classes_.Location,
+                                     start = $"{courses_classes_.StartTime:hh\\:mm\\:ss}",
+                                     end = $"{courses_classes_.EndTime:hh\\:mm\\:ss}",
+                                     fname = courses_classes_professors_.FName,
+                                     lname = courses_classes_professors_.LName
+                                 };
 
             return Json(classOfferings);
         }
@@ -115,21 +118,24 @@ namespace LMS.Controllers
         /// <param name="asgname">The name of the assignment in the category</param>
         /// <returns>The assignment contents</returns>
         public IActionResult GetAssignmentContents(string subject, int num, string season, int year, string category, string asgname)
-        {            
-             var assignment = _db.Assignments
-                .Include(a => a.Class)
-                .ThenInclude(c => c.Course)
-                .ThenInclude(co => co.Department)
-                .Where(a => a.Class.Course.Department.Subject == subject &&
-                            a.Class.Course.Number == num &&
-                            a.Class.Semester == season &&
-                            a.Class.Year == year &&
-                            a.Category == category &&
-                            a.Name == asgname)
-                .Select(a => a.Contents)
-                .FirstOrDefault();
-
-            return Content(assignment ?? "");
+        {
+            var assignment = from courses in _db.Courses.Where(c =>
+                                c.CNum == num && c.Subject == subject)
+                             join classes in _db.Classes.Where(c =>
+                                c.Season == season && c.Year == year)
+                             on courses.CId equals classes.CId into courses_classes
+                             from courses_classes_ in courses_classes.DefaultIfEmpty()
+                             join aCateg in _db.AssignmentCategories.Where(ac => ac.Name == category)
+                             on courses_classes_.ClassId equals aCateg.ClassId into courses_classes_aCateg
+                             from courses_classes_aCateg_ in courses_classes_aCateg.DefaultIfEmpty()
+                             join asg in _db.Assignments.Where(asg => asg.Name == asgname)
+                             on courses_classes_aCateg_.CategId equals asg.CategId into courses_classes_aCateg_asg
+                             from courses_classes_aCateg_asg_ in courses_classes_aCateg_asg.DefaultIfEmpty()
+                             select new
+                             {
+                                 contents = courses_classes_aCateg_asg_.Contents
+                             };
+            return Content(assignment.First().contents);
         }
 
 
@@ -148,24 +154,29 @@ namespace LMS.Controllers
         /// <param name="uid">The uid of the student who submitted it</param>
         /// <returns>The submission text</returns>
         public IActionResult GetSubmissionText(string subject, int num, string season, int year, string category, string asgname, string uid)
-        {            
+        {
 
-    var submission = _db.Submissions
-        .Include(s => s.Assignment)
-        .ThenInclude(a => a.Class)
-        .ThenInclude(c => c.Course)
-        .ThenInclude(co => co.Department)
-        .Where(s => s.Assignment.Class.Course.Department.Subject == subject &&
-                    s.Assignment.Class.Course.Number == num &&
-                    s.Assignment.Class.Semester == season &&
-                    s.Assignment.Class.Year == year &&
-                    s.Assignment.Category == category &&
-                    s.Assignment.Name == asgname &&
-                    s.StudentId == uid)
-        .Select(s => s.Contents)
-        .FirstOrDefault();
+            var submission = from courses in _db.Courses.Where(c =>
+                                c.CNum == num && c.Subject == subject)
+                             join classes in _db.Classes.Where(c =>
+                                c.Season == season && c.Year == year)
+                             on courses.CId equals classes.CId into courses_classes
+                             from courses_classes_ in courses_classes.DefaultIfEmpty()
+                             join aCateg in _db.AssignmentCategories.Where(ac => ac.Name == category)
+                             on courses_classes_.ClassId equals aCateg.ClassId into courses_classes_aCateg
+                             from courses_classes_aCateg_ in courses_classes_aCateg.DefaultIfEmpty()
+                             join asg in _db.Assignments.Where(asg => asg.Name == asgname)
+                             on courses_classes_aCateg_.CategId equals asg.CategId into courses_classes_aCateg_asg
+                             from courses_classes_aCateg_asg_ in courses_classes_aCateg_asg.DefaultIfEmpty()
+                             join s in _db.Submissions.Where(s => s.Student == uid)
+                             on courses_classes_aCateg_asg_.AId equals s.Assignment into courses_classes_aCateg_asg_s
+                             from courses_classes_aCaeg_asg_s_ in courses_classes_aCateg_asg_s.DefaultIfEmpty()
+                             select new
+                             {
+                                 submissionText = courses_classes_aCaeg_asg_s_.SubmissionContents
+                             };
 
-    return Content(submission ?? "");
+            return Content(submission.First().submissionText);
         }
 
 
@@ -186,60 +197,49 @@ namespace LMS.Controllers
         /// or an object containing {success: false} if the user doesn't exist
         /// </returns>
         public IActionResult GetUser(string uid)
-        {           
+        {
             //Create a professor instance to test for professor. 
-             var professor = _db.Professors
-        .Include(p => p.Department)
-        .Where(p => p.UId == uid)
-        .Select(p => new
-        {
-            fname = p.FirstName,
-            lname = p.LastName,
-            uid = p.UId,
-            department = p.Department.Name
-        })
-        .FirstOrDefault();
+            var professor = from p in _db.Professors.Where(p => p.UId == uid)
+                            select new
+                            {
+                                fname = p.FName,
+                                lname = p.LName,
+                                uid = p.UId,
+                                department = p.WorksIn
+                            };
+            if (professor.Any())
+            {
+                return Json(professor.FirstOrDefault());
+            }
 
-    if (professor != null)
-    {
-        return Json(professor);
-    }
+            //Create a student instance to test for student.
+            var student = from s in _db.Students.Where(s => s.UId == uid)
+                            select new
+                            {
+                                fname = s.Fname,
+                                lname = s.Lname,
+                                uid = s.UId,
+                                department = s.Major
+                            };
+            if (student.Any())
+            {
+                return Json(student.FirstOrDefault());
+            }
 
-    //Create a student instance to test for student.
-    var student = _db.Students
-        .Include(s => s.Department)
-        .Where(s => s.UId == uid)
-        .Select(s => new
-        {
-            fname = s.FirstName,
-            lname = s.LastName,
-            uid = s.UId,
-            department = s.Department.Name
-        })
-        .FirstOrDefault();
+            //Create a administrator instance to test for administrator.
+            var administrator = from a in _db.Administrators.Where(a => a.UId == uid)
+                                select new
+                                {
+                                    fname = a.Fname,
+                                    lname = a.Lname,
+                                    uid = a.UId
+                                };
+            if (administrator.Any())
+            {
+                return Json(administrator.FirstOrDefault());
+            }
 
-    if (student != null)
-    {
-        return Json(student);
-    }
-
-     //Create a administrator instance to test for administrator.
-    var administrator = _db.Administrators
-        .Where(a => a.UId == uid)
-        .Select(a => new
-        {
-            fname = a.FirstName,
-            lname = a.LastName,
-            uid = a.UId
-        })
-        .FirstOrDefault();
-
-    if (administrator != null)
-    {
-        return Json(administrator);
-    }
-
-    return Json(new { success = false });
+            return Json(new { success = false });
         }
 
 

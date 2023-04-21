@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading.Tasks;
 using LMS.Models.LMSModels;
@@ -15,11 +16,11 @@ namespace LMS_CustomIdentity.Controllers
     public class ProfessorController : Controller
     {
 
-        private readonly LMSContext db;
+        private readonly LMSContext _db;
 
         public ProfessorController(LMSContext _db)
         {
-            db = _db;
+            this._db = _db;
         }
 
         public IActionResult Index()
@@ -117,24 +118,25 @@ namespace LMS_CustomIdentity.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetStudentsInClass(string subject, int num, string season, int year)
         {
-            var students = _db.Enrollments
-       .Include(e => e.Student)
-       .Include(e => e.Class.Course)
-       .Where(e => e.Class.Course.Department.Subject == subject &&
-                   e.Class.Course.Number == num &&
-                   e.Class.Semester == season &&
-                   e.Class.Year == year)
-       .Select(e => new
-       {
-           fname = e.Student.FirstName,
-           lname = e.Student.LastName,
-           uid = e.Student.UId,
-           dob = e.Student.DOB,
-           grade = e.Grade
-       })
-       .ToList();
-
-            return Json(students);
+            var students = from cour in _db.Courses.Where(c => c.CNum == num && c.Subject == subject)
+                           join clas in _db.Classes.Where(c => c.Season == season && c.Year == year)
+                           on cour.CId equals clas.CId into cour_clas
+                           from cour_clas_ in cour_clas.DefaultIfEmpty()
+                           join e in _db.Enrolleds
+                           on cour_clas_.ClassId equals e.Class into cour_clas_e
+                           from cour_clas_e_ in cour_clas_e.DefaultIfEmpty()
+                           join s in _db.Students
+                           on cour_clas_e_.Student equals s.UId into cour_clas_e_s
+                           from cour_clas_e_s_ in cour_clas_e_s.DefaultIfEmpty()
+                           select new
+                           {
+                               fname = cour_clas_e_s_.Fname,
+                               lname = cour_clas_e_s_.Lname,
+                               uid = cour_clas_e_s_.UId,
+                               dob = cour_clas_e_s_.Dob,
+                               grade = cour_clas_e_.Grade
+                           };
+            return Json(students.ToArray());
         }
 
 
@@ -157,23 +159,23 @@ namespace LMS_CustomIdentity.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetAssignmentsInCategory(string subject, int num, string season, int year, string category)
         {
-            var assignments = _db.Assignments
-        .Include(a => a.Category.Class.Course)
-        .Where(a => a.Category.Class.Course.Department.Subject == subject &&
-                    a.Category.Class.Course.Number == num &&
-                    a.Category.Class.Semester == season &&
-                    a.Category.Class.Year == year &&
-                    (category == null || a.Category.Name == category))
-        .Select(a => new
-        {
-            aname = a.Name,
-            cname = a.Category.Name,
-            due = a.DueDate,
-            submissions = a.Submissions.Count
-        })
-        .ToList();
-
-            return Json(assignments);
+            var assignments = from asgn in _db.Assignments
+                              join asgn_asgnCat in _db.AssignmentCategories on asgn.CategId equals asgn_asgnCat.CategId
+                              join asgn_asgnCat_class in _db.Classes on asgn_asgnCat.ClassId equals asgn_asgnCat_class.ClassId
+                              join asgn_asgnCat_class_course in _db.Courses on asgn_asgnCat_class.CId equals asgn_asgnCat_class_course.CId
+                              where asgn_asgnCat_class_course.Subject == subject &&
+                                    asgn_asgnCat_class_course.CNum == num &&
+                                    asgn_asgnCat_class.Season == season &&
+                                    asgn_asgnCat_class.Year == year &&
+                                    (category == null || asgn_asgnCat.Name == category)
+                              select new
+                              {
+                                  aname = asgn.Name,
+                                  cname = asgn_asgnCat.Name,
+                                  due = asgn.Due,
+                                  submissions = asgn.Submissions.Count
+                              };
+            return Json(assignments.ToArray());
         }
 
 
@@ -191,20 +193,19 @@ namespace LMS_CustomIdentity.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetAssignmentCategories(string subject, int num, string season, int year)
         {
-            var categories = _db.AssignmentCategories
-       .Include(c => c.Class.Course)
-       .Where(c => c.Class.Course.Department.Subject == subject &&
-                   c.Class.Course.Number == num &&
-                   c.Class.Semester == season &&
-                   c.Class.Year == year)
-       .Select(c => new
-       {
-           name = c.Name,
-           weight = c.Weight
-       })
-       .ToList();
-
-            return Json(categories);
+            var asgnCategories = from cour in _db.Courses.Where(c => c.CNum == num && c.Subject == subject)
+                                 join clas in _db.Classes.Where(c => c.Season == season && c.Year == year)
+                                 on cour.CId equals clas.CId into cour_clas
+                                 from cour_clas_ in cour_clas.DefaultIfEmpty()
+                                 join ac in _db.AssignmentCategories
+                                 on cour_clas_.ClassId equals ac.ClassId into cour_clas_ac
+                                 from cour_clas_ac_ in cour_clas_ac.DefaultIfEmpty()
+                                 select new
+                                 {
+                                     name = cour_clas_ac_.Name,
+                                     weight = cour_clas_ac_.GradingWeight
+                                 };
+            return Json(asgnCategories.ToArray());
         }
 
         /// <summary>
@@ -220,35 +221,45 @@ namespace LMS_CustomIdentity.Controllers
         /// <returns>A JSON object containing {success = true/false} </returns>
         public IActionResult CreateAssignmentCategory(string subject, int num, string season, int year, string category, int catweight)
         {
-            var existingCategory = _db.AssignmentCategories
-         .Include(c => c.Class.Course)
-         .FirstOrDefault(c => c.Class.Course.Department.Subject == subject &&
-                              c.Class.Course.Number == num &&
-                              c.Class.Semester == season &&
-                              c.Class.Year == year &&
-                              c.Name == category);
-
-            if (existingCategory != null)
+            // check if the category already exists for that class
+            var existingCategory = from cour in _db.Courses.Where(c => c.CNum == num && c.Subject == subject)
+                                   join clas in _db.Classes.Where(c => c.Season == season && c.Year == year)
+                                   on cour.CId equals clas.CId into cour_clas
+                                   from cour_clas_ in cour_clas.DefaultIfEmpty()
+                                   join ac in _db.AssignmentCategories.Where(ac => ac.Name == category)
+                                   on cour_clas_.ClassId equals ac.ClassId into cour_clas_ac
+                                   from cour_clas_ac_ in cour_clas_ac.DefaultIfEmpty()
+                                   select new
+                                   {
+                                       tmp = cour_clas_ac_.CategId
+                                   };
+            if (existingCategory.Any())
             {
                 return Json(new { success = false });
             }
 
-            var targetClass = _db.Classes
-                .Include(c => c.Course)
-                .FirstOrDefault(c => c.Course.Department.Subject == subject &&
-                                     c.Course.Number == num &&
-                                     c.Semester == season &&
-                                     c.Year == year);
-
-            if (targetClass == null)
+            // Find class for the new category
+            var targetClass = from cour in _db.Courses.Where(c => c.CNum == num && c.Subject == subject)
+                              join clas in _db.Classes.Where(c => c.Season == season && c.Year == year)
+                              on cour.CId equals clas.CId into cour_clas
+                              from cour_clas_ in cour_clas.DefaultIfEmpty()
+                              select new
+                              {
+                                  classID = cour_clas_.ClassId
+                              };
+            if (!targetClass.Any())
             {
                 return Json(new { success = false });
             }
-
-            var newCategory = new AssignmentCategory { Name = category, Weight = catweight, Class = targetClass };
+            // Create new assignment category for the target class
+            var newCategory = new AssignmentCategory
+            {
+                Name = category,
+                GradingWeight = Convert.ToUInt32(catweight),
+                ClassId = Convert.ToUInt32(targetClass)
+            };
             _db.AssignmentCategories.Add(newCategory);
             _db.SaveChanges();
-
             return Json(new { success = true });
         }
 
@@ -267,37 +278,53 @@ namespace LMS_CustomIdentity.Controllers
         /// <returns>A JSON object containing success = true/false</returns>
         public IActionResult CreateAssignment(string subject, int num, string season, int year, string category, string asgname, int asgpoints, DateTime asgdue, string asgcontents)
         {
-            var existingAssignment = _db.Assignments
-        .Include(a => a.Category.Class.Course)
-        .FirstOrDefault(a => a.Category.Class.Course.Department.Subject == subject &&
-                             a.Category.Class.Course.Number == num &&
-                             a.Category.Class.Semester == season &&
-                             a.Category.Class.Year == year &&
-                             a.Category.Name == category &&
-                             a.Name == asgname);
-
-            if (existingAssignment != null)
+            // check if the assignment already exists
+            var asgnExists = from asgn in _db.Assignments.Where(a =>
+                                    a.Name == asgname &&
+                                    a.MaxPoints == asgpoints &&
+                                    a.Due == asgdue &&
+                                    a.Contents == asgcontents)
+                             join asgnCat in _db.AssignmentCategories
+                             on asgn.CategId equals asgnCat.CategId into asgn_asgnCat
+                             from asgn_asgnCat_ in asgn_asgnCat.DefaultIfEmpty()
+                             select new
+                             {
+                                 tmp = asgn_asgnCat_.CategId
+                             };
+            if (asgnExists.Any())
             {
                 return Json(new { success = false });
             }
 
-            var targetCategory = _db.AssignmentCategories
-                .Include(c => c.Class.Course)
-                .FirstOrDefault(c => c.Class.Course.Department.Subject == subject &&
-                                     c.Class.Course.Number == num &&
-                                     c.Class.Semester == season &&
-                                     c.Class.Year == year &&
-                                     c.Name == category);
-
-            if (targetCategory == null)
+            // check if the category exists for that class
+            var existingCategory = from cour in _db.Courses.Where(c => c.CNum == num && c.Subject == subject)
+                                   join clas in _db.Classes.Where(c => c.Season == season && c.Year == year)
+                                   on cour.CId equals clas.CId into cour_clas
+                                   from cour_clas_ in cour_clas.DefaultIfEmpty()
+                                   join ac in _db.AssignmentCategories.Where(ac => ac.Name == category)
+                                   on cour_clas_.ClassId equals ac.ClassId into cour_clas_ac
+                                   from cour_clas_ac_ in cour_clas_ac.DefaultIfEmpty()
+                                   select new
+                                   {
+                                       categId = cour_clas_ac_.CategId
+                                   };
+            if (!existingCategory.Any())
             {
                 return Json(new { success = false });
             }
 
-            var newAssignment = new Assignment { Name = asgname, MaxPoints = asgpoints, DueDate = asgdue, Contents = asgcontents, Category = targetCategory };
+            // create the new assignment
+            var newAssignment = new Assignment
+            {
+                Name = asgname,
+                MaxPoints = Convert.ToUInt32(asgpoints),
+                Due = asgdue,
+                Contents = asgcontents,
+                CategId = existingCategory.First().categId
+            };
+            // Add new assignment to the database
             _db.Assignments.Add(newAssignment);
             _db.SaveChanges();
-
             return Json(new { success = true });
         }
 
@@ -321,26 +348,33 @@ namespace LMS_CustomIdentity.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetSubmissionsToAssignment(string subject, int num, string season, int year, string category, string asgname)
         {
-            var submissions = _db.Submissions
-        .Include(s => s.Student)
-        .Include(s => s.Assignment.Category.Class.Course)
-        .Where(s => s.Assignment.Category.Class.Course.Department.Subject == subject &&
-                    s.Assignment.Category.Class.Course.Number == num &&
-                    s.Assignment.Category.Class.Semester == season &&
-                    s.Assignment.Category.Class.Year == year &&
-                    s.Assignment.Category.Name == category &&
-                    s.Assignment.Name == asgname)
-        .Select(s => new
-        {
-            fname = s.Student.FirstName,
-            lname = s.Student.LastName,
-            uid = s.Student.UId,
-            time = s.Time,
-            score = s.Score
-        })
-        .ToList();
-
-            return Json(submissions);
+            var submissions = from courses in _db.Courses.Where(c =>
+                                    c.CNum == num && c.Subject == subject)
+                              join classes in _db.Classes.Where(c =>
+                                     c.Season == season && c.Year == year)
+                                 on courses.CId equals classes.CId into courses_classes
+                              from courses_classes_ in courses_classes.DefaultIfEmpty()
+                              join aCateg in _db.AssignmentCategories.Where(ac => ac.Name == category)
+                                 on courses_classes_.ClassId equals aCateg.ClassId into courses_classes_aCateg
+                              from courses_classes_aCateg_ in courses_classes_aCateg.DefaultIfEmpty()
+                              join asg in _db.Assignments.Where(asg => asg.Name == asgname)
+                                 on courses_classes_aCateg_.CategId equals asg.CategId into courses_classes_aCateg_asg
+                              from courses_classes_aCateg_asg_ in courses_classes_aCateg_asg.DefaultIfEmpty()
+                              join sub in _db.Submissions
+                                 on courses_classes_aCateg_asg_.AId equals sub.Assignment into courses_classes_aCateg_asg_sub
+                              from courses_classes_aCateg_asg_sub_ in courses_classes_aCateg_asg_sub.DefaultIfEmpty()
+                              join stud in _db.Students
+                                 on courses_classes_aCateg_asg_sub_.Student equals stud.UId into courses_classes_aCateg_asg_sub_stud
+                              from courses_classes_aCateg_asg_sbu_stud_ in courses_classes_aCateg_asg_sub_stud.DefaultIfEmpty()
+                              select new
+                              {
+                                  fname = courses_classes_aCateg_asg_sbu_stud_.Fname,
+                                  lname = courses_classes_aCateg_asg_sbu_stud_.Lname,
+                                  uid = courses_classes_aCateg_asg_sbu_stud_.UId,
+                                  time = courses_classes_aCateg_asg_sub_.Time,
+                                  score = courses_classes_aCateg_asg_sub_.Score
+                              };
+            return Json(submissions.ToArray());
         }
 
 
@@ -358,25 +392,31 @@ namespace LMS_CustomIdentity.Controllers
         /// <returns>A JSON object containing success = true/false</returns>
         public IActionResult GradeSubmission(string subject, int num, string season, int year, string category, string asgname, string uid, int score)
         {
-            var submission = _db.Submissions
-        .Include(s => s.Student)
-        .Include(s => s.Assignment.Category.Class.Course)
-        .FirstOrDefault(s => s.Assignment.Category.Class.Course.Department.Subject == subject &&
-                             s.Assignment.Category.Class.Course.Number == num &&
-                             s.Assignment.Category.Class.Semester == season &&
-                             s.Assignment.Category.Class.Year == year &&
-                             s.Assignment.Category.Name == category &&
-                             s.Assignment.Name == asgname &&
-                             s.Student.UId == uid);
-
+            // Find the submission
+            var submission = (from courses in _db.Courses.Where(c =>
+                                    c.CNum == num && c.Subject == subject)
+                              join classes in _db.Classes.Where(c =>
+                                     c.Season == season && c.Year == year)
+                                 on courses.CId equals classes.CId into courses_classes
+                              from courses_classes_ in courses_classes.DefaultIfEmpty()
+                              join aCateg in _db.AssignmentCategories.Where(ac => ac.Name == category)
+                                 on courses_classes_.ClassId equals aCateg.ClassId into courses_classes_aCateg
+                              from courses_classes_aCateg_ in courses_classes_aCateg.DefaultIfEmpty()
+                              join asg in _db.Assignments.Where(asg => asg.Name == asgname)
+                                 on courses_classes_aCateg_.CategId equals asg.CategId into courses_classes_aCateg_asg
+                              from courses_classes_aCateg_asg_ in courses_classes_aCateg_asg.DefaultIfEmpty()
+                              join sub in _db.Submissions.Where(s => s.Student == uid)
+                                 on courses_classes_aCateg_asg_.AId equals sub.Assignment into courses_classes_aCateg_asg_sub
+                              from courses_classes_aCateg_asg_sub_ in courses_classes_aCateg_asg_sub.DefaultIfEmpty()
+                              select courses_classes_aCateg_asg_sub_).SingleOrDefault();
             if (submission == null)
             {
                 return Json(new { success = false });
             }
 
-            submission.Score = score;
+            // Change the submission's score in the database
+            submission.Score = Convert.ToUInt32(score);
             _db.SaveChanges();
-
             return Json(new { success = true });
         }
 
@@ -394,21 +434,19 @@ namespace LMS_CustomIdentity.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetMyClasses(string uid)
         {
-            var classes = _db.Classes
-        .Include(c => c.Course)
-        .Include(c => c.Professor)
-        .Where(c => c.Professor.UId == uid)
-        .Select(c => new
-        {
-            subject = c.Course.Department.Subject,
-            number = c.Course.Number,
-            name = c.Course.Name,
-            season = c.Semester,
-            year = c.Year
-        })
-        .ToList();
-
-            return Json(classes);
+            var myClasses = from clas in _db.Classes.Where(c => c.TaughtBy == uid)
+                            join p in _db.Professors on clas.TaughtBy equals p.UId into c_p
+                            join cour in _db.Courses on clas.CId equals cour.CId into clas_p_cour
+                            from clas_p_cour_ in clas_p_cour.DefaultIfEmpty()
+                            select new
+                            {
+                                subject = clas_p_cour_.Subject,
+                                number = clas_p_cour_.CNum,
+                                name = clas_p_cour_.Name,
+                                season = clas.Season,
+                                year = clas.Year
+                            };
+            return Json(myClasses.ToArray());
         }
 
 
