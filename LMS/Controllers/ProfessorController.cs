@@ -324,6 +324,27 @@ namespace LMS_CustomIdentity.Controllers
             };
             // Add new assignment to the database
             _db.Assignments.Add(newAssignment);
+
+            // Fetch the list of students enrolled in the class
+            var enrolledStudents = (from enrollment in _db.Enrolleds
+                                    where enrollment.Class == num
+                                    join student in _db.Students
+                                    on enrollment.Student equals student.UId
+                                    select student).ToList();
+
+            // Recalculate and update the grades for all students enrolled in the class
+            foreach (var student in enrolledStudents)
+            {
+                string updatedLetterGrade = CalculateStudentGrade(student.UId, num);
+                // Update the student's grade in the database
+                var studentEnrollment = _db.Enrolleds.FirstOrDefault(e => e.Student == student.UId && e.Class == num);
+                if (studentEnrollment != null)
+                {
+                    studentEnrollment.Grade = updatedLetterGrade;
+                }
+            }
+
+
             _db.SaveChanges();
             return Json(new { success = true });
         }
@@ -416,6 +437,7 @@ namespace LMS_CustomIdentity.Controllers
 
             // Change the submission's score in the database
             submission.Score = Convert.ToUInt32(score);
+            string updatedLetterGrade = CalculateStudentGrade(uid, num);
             _db.SaveChanges();
             return Json(new { success = true });
         }
@@ -448,7 +470,113 @@ namespace LMS_CustomIdentity.Controllers
                             };
             return Json(myClasses.ToArray());
         }
+        /// <summary>
+        /// Helpder method to calculate the grade.
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="classId"></param>
+        private string CalculateStudentGrade(string studentId, int classId)
+        {
+            var assignmentCategories = _db.AssignmentCategories.Where(ac => ac.ClassId == classId).ToList();
+            double totalScaledScore = 0;
+            double totalCategoryWeights = 0;
 
+            foreach (var category in assignmentCategories)
+            {
+                var assignments = _db.Assignments.Where(a => a.CategId == category.CategId).ToList();
+
+                if (assignments.Count > 0)
+                {
+                    double totalPointsEarned = 0;
+                    double totalMaxPoints = 0;
+
+                    foreach (var assignment in assignments)
+                    {
+                        var submission = _db.Submissions.SingleOrDefault(s => s.Assignment == assignment.AId && s.Student == studentId);
+                        totalPointsEarned += submission?.Score ?? 0;
+                        totalMaxPoints += (double)(assignment.MaxPoints ?? 0);
+                    }
+
+                    double categoryPercentage = totalPointsEarned / totalMaxPoints;
+                    double scaledCategoryTotal = (categoryPercentage * (double)(category.GradingWeight ?? 0));
+                    totalScaledScore += scaledCategoryTotal;
+                    totalCategoryWeights += (double)(category.GradingWeight ?? 0);
+                }
+            }
+
+            double scalingFactor = 100 / totalCategoryWeights;
+            double finalPercentage = totalScaledScore * scalingFactor;
+
+            // Convert the final percentage to a letter grade based on the scale found in your class syllabus
+            string letterGrade = ConvertPercentageToLetterGrade(finalPercentage);
+
+            // Update the grade in the database
+            var enrollment = _db.Enrolleds.SingleOrDefault(e => e.Student == studentId && e.Class == classId);
+            if (enrollment != null)
+            {
+                enrollment.Grade = letterGrade;
+                _db.SaveChanges();
+            }
+
+            return letterGrade;
+        }
+
+        /// <summary>
+        /// Helpder method to give a Letter grade for grade percentage. 
+        /// </summary>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        private string ConvertPercentageToLetterGrade(double percentage)
+        {
+            if (percentage >= 93)
+            {
+                return "A";
+            }
+            else if (percentage >= 90)
+            {
+                return "A-";
+            }
+            else if (percentage >= 87)
+            {
+                return "B+";
+            }
+            else if (percentage >= 83)
+            {
+                return "B";
+            }
+            else if (percentage >= 80)
+            {
+                return "B-";
+            }
+            else if (percentage >= 77)
+            {
+                return "C+";
+            }
+            else if (percentage >= 73)
+            {
+                return "C";
+            }
+            else if (percentage >= 70)
+            {
+                return "C-";
+            }
+            else if (percentage >= 67)
+            {
+                return "D+";
+            }
+            else if (percentage >= 63)
+            {
+                return "D";
+            }
+            else if (percentage >= 60)
+            {
+                return "D-";
+            }
+            else
+            {
+                return "F";
+            }
+        }
 
 
         /*******End code to modify********/

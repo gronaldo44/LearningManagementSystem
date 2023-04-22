@@ -96,8 +96,8 @@ namespace LMS.Controllers
                                      season = courses_classes_.Season,
                                      year = courses_classes_.Year,
                                      location = courses_classes_.Location,
-                                     start = $"{courses_classes_.StartTime:hh\\:mm\\:ss}",
-                                     end = $"{courses_classes_.EndTime:hh\\:mm\\:ss}",
+                                     start = courses_classes_.StartTime.HasValue ? $"{courses_classes_.StartTime.Value:hh\\:mm\\:ss}" : null,
+                                     end = courses_classes_.EndTime.HasValue ? $"{courses_classes_.EndTime.Value:hh\\:mm\\:ss}" : null,
                                      fname = courses_classes_professors_.FName,
                                      lname = courses_classes_professors_.LName
                                  };
