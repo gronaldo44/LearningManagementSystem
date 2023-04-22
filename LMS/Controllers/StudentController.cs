@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using LMS.Models.LMSModels;
@@ -75,17 +76,17 @@ namespace LMS.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetMyClasses(string uid)
         {
-            var myClasses = from e in db.Enrolleds.Where(e => e.Student == uid)
-                            join clas in db.Classes on e.Class equals clas.ClassId into e_clas
-                            from e_clas_ in e_clas.DefaultIfEmpty()
-                            join cour in db.Courses on e_clas_.CId equals cour.CId into e_clas_cour
-                            from e_clas_cour_ in e_clas_cour.DefaultIfEmpty()
+            var myClasses = from e in db.Enrolleds
+                            join cl in db.Classes on e.Class equals cl.ClassId
+                            join co in db.Courses on cl.CId equals co.CId
+                            where e.Student == uid
                             select new
                             {
-                                subject = e_clas_cour_.Subject,
-                                number = e_clas_cour_.CNum,
-                                season = e_clas_.Season,
-                                year = e_clas_.Year,
+                                subject = co.Subject,
+                                number = co.CNum,
+                                name = co.Name,
+                                season = cl.Season,
+                                year = cl.Year,
                                 grade = e.Grade
                             };
             return Json(myClasses.ToArray());
@@ -107,23 +108,22 @@ namespace LMS.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetAssignmentsInClass(string subject, int num, string season, int year, string uid)
         {
-            var query = from a in db.Assignments
-                        join c in db.AssignmentCategories on a.CategId equals c.CategId
-                        join cl in db.Classes on c.ClassId equals cl.ClassId
-                        join co in db.Courses on cl.CId equals co.CId
-                        join s in db.Submissions on a.AId equals s.Assignment into scores
-                        from subs in scores.DefaultIfEmpty()
-                        where co.Subject == subject && co.CNum == num &&
-                            cl.Season == season && cl.Year == year &&
-                            subs.Student == uid
-                        select new
-                        {
-                            aname = a.Name,
-                            cname = c.Name,
-                            due = a.Due,
-                            score = subs == null ? (uint?)null : subs.Score
-                        };
-            return Json(query.ToArray());
+            var assignments = from cl in db.Classes
+                              where cl.Season == season && cl.Year == year
+                              join co in db.Courses on cl.CId equals co.CId
+                              where co.Subject == subject && co.CNum == num
+                              join ac in db.AssignmentCategories on cl.ClassId equals ac.ClassId
+                              join assgn in db.Assignments on ac.CategId equals assgn.CategId
+                              join s in db.Submissions.Where(s => s.Student == uid) on assgn.AId equals s.Assignment into subs
+                              from s in subs.DefaultIfEmpty()
+                              select new
+                              {
+                                  aname = assgn.Name,
+                                  cname = ac.Name,
+                                  due = assgn.Due,
+                                  score = s == null ? (uint?)null : s.Score
+                              };
+            return Json(assignments.ToArray());
         }
 
 

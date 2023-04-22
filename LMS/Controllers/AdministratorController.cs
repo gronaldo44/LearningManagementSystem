@@ -180,17 +180,15 @@ namespace LMS.Controllers
                 return Json(new { success = false });
             }
             // Check if another professor is already teaching the course that semester
-            var isAlreadyTaught = from cour in _db.Courses.Where(c => c.CNum == number)
-                                     join clas in _db.Classes.
-                    Where(c => c.Season == season &&
-                        c.Year == year)
-                    on cour.CId equals clas.CId into cour_clas
-                                     from cour_clas_ in cour_clas.DefaultIfEmpty()
-                                     select new
-                                     {
-                                         tmp = cour_clas_.ClassId
-                                     };
-            if (isAlreadyTaught.Any())
+            bool isAlreadyBeingTaught = (from cl in _db.Classes
+                                       join co in _db.Courses on cl.CId equals co.CId
+                                       where cl.Season == season && cl.Year == year &&
+                                        co.CNum == number && co.Subject == subject
+                                       select new
+                                       {
+                                           tmp = cl.ClassId
+                                       }).Any();
+            if (isAlreadyBeingTaught)
             {
                 return Json(new {success = false});
             }

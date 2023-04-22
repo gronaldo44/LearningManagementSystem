@@ -83,26 +83,21 @@ namespace LMS.Controllers
         /// <returns>The JSON array</returns>
         public IActionResult GetClassOfferings(string subject, int number)
         {
-            var classOfferings = from courses in _db.Courses.
-                                 Where(c => c.CNum == number && subject == c.Subject)
-                                 join classes in _db.Classes
-                                 on courses.CId equals classes.CId into courses_classes
-                                 from courses_classes_ in courses_classes.DefaultIfEmpty()
-                                 join courses_classes_professors in _db.Professors
-                                 on courses_classes_.TaughtBy equals courses_classes_professors.UId into courses_classes_professors
-                                 from courses_classes_professors_ in courses_classes_professors.DefaultIfEmpty()
+            var classOfferings = from co in _db.Courses
+                                 join cl in _db.Classes on co.CId equals cl.CId
+                                 join p in _db.Professors on cl.TaughtBy equals p.UId
+                                 where co.CNum == number && co.Subject == subject
                                  select new
                                  {
-                                     season = courses_classes_.Season,
-                                     year = courses_classes_.Year,
-                                     location = courses_classes_.Location,
-                                     start = courses_classes_.StartTime.HasValue ? $"{courses_classes_.StartTime.Value:hh\\:mm\\:ss}" : null,
-                                     end = courses_classes_.EndTime.HasValue ? $"{courses_classes_.EndTime.Value:hh\\:mm\\:ss}" : null,
-                                     fname = courses_classes_professors_.FName,
-                                     lname = courses_classes_professors_.LName
+                                     season = cl.Season,
+                                     year = cl.Year,
+                                     location = cl.Location,
+                                     start = cl.StartTime,
+                                     end = cl.EndTime,
+                                     fname = p.FName,
+                                     lname = p.LName
                                  };
-
-            return Json(classOfferings);
+            return Json(classOfferings.ToArray());
         }
 
         /// <summary>
