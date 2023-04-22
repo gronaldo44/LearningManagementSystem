@@ -11130,23 +11130,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\gronaldo44\\.nuget\\packages\\": {},
+    "C:\\Users\\phucd\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\LMSControllerTests.csproj",
+      "projectUniqueName": "C:\\Users\\phucd\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\LMSControllerTests.csproj",
       "projectName": "LMSControllerTests",
-      "projectPath": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\LMSControllerTests.csproj",
-      "packagesPath": "C:\\Users\\gronaldo44\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\obj\\",
+      "projectPath": "C:\\Users\\phucd\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\LMSControllerTests.csproj",
+      "packagesPath": "C:\\Users\\phucd\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\phucd\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\gronaldo44\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\phucd\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -11162,8 +11162,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMS\\LMS.csproj": {
-              "projectPath": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMS\\LMS.csproj"
+            "C:\\Users\\phucd\\Source\\Repos\\CS_5530-Team_Project\\LMS\\LMS.csproj": {
+              "projectPath": "C:\\Users\\phucd\\Source\\Repos\\CS_5530-Team_Project\\LMS\\LMS.csproj"
             }
           }
         }
