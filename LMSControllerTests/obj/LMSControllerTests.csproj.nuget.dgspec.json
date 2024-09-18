@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\LMSControllerTests.csproj": {}
+    "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMSControllerTests\\LMSControllerTests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\LMSControllerTests.csproj": {
+    "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMSControllerTests\\LMSControllerTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\LMSControllerTests.csproj",
+        "projectUniqueName": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMSControllerTests\\LMSControllerTests.csproj",
         "projectName": "LMSControllerTests",
-        "projectPath": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\LMSControllerTests.csproj",
-        "packagesPath": "C:\\Users\\gronaldo44\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMSControllerTests\\obj\\",
+        "projectPath": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMSControllerTests\\LMSControllerTests.csproj",
+        "packagesPath": "C:\\Users\\u1425083\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMSControllerTests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\gronaldo44\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\u1425083\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -33,8 +34,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMS\\LMS.csproj": {
-                "projectPath": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMS\\LMS.csproj"
+              "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\LMS.csproj": {
+                "projectPath": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\LMS.csproj"
               }
             }
           }
@@ -43,6 +44,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -90,24 +96,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMS\\LMS.csproj": {
+    "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\LMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMS\\LMS.csproj",
+        "projectUniqueName": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\LMS.csproj",
         "projectName": "LMS",
-        "projectPath": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMS\\LMS.csproj",
-        "packagesPath": "C:\\Users\\gronaldo44\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\gronaldo44\\Source\\Repos\\CS_5530-Team_Project\\LMS\\obj\\",
+        "projectPath": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\LMS.csproj",
+        "packagesPath": "C:\\Users\\u1425083\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\gronaldo44\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\u1425083\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -129,6 +136,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -185,7 +197,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303\\RuntimeIdentifierGraph.json"
         }
       }
     }

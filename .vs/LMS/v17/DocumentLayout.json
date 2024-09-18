@@ -1,0 +1,252 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\models\\lmsmodels\\assignmentcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\models\\lmsmodels\\assignmentcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\areas\\identity\\pages\\account\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\areas\\identity\\pages\\account\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\controllers\\commoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\controllers\\commoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\controllers\\administratorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\controllers\\administratorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\controllers\\professorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\controllers\\professorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\models\\lmsmodels\\assignment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\models\\lmsmodels\\assignment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\models\\lmsmodels\\class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\models\\lmsmodels\\class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\models\\lmsmodels\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\models\\lmsmodels\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\models\\lmsmodels\\professor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\models\\lmsmodels\\professor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\models\\lmsmodels\\administrator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\models\\lmsmodels\\administrator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|c:\\users\\u1425083\\documents\\github\\learningmanagementsystem\\lms\\models\\lmsmodels\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7779DCA-6458-4556-ABC4-E8D6A159851E}|LMS\\LMS.csproj|solutionrelative:lms\\models\\lmsmodels\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 254,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AdministratorController.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\AdministratorController.cs",
+              "RelativeDocumentMoniker": "LMS\\Controllers\\AdministratorController.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\AdministratorController.cs",
+              "RelativeToolTip": "LMS\\Controllers\\AdministratorController.cs",
+              "ViewState": "AQIAAKgAAAAAAAAAAAAywGQAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.079Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ProfessorController.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\ProfessorController.cs",
+              "RelativeDocumentMoniker": "LMS\\Controllers\\ProfessorController.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\ProfessorController.cs",
+              "RelativeToolTip": "LMS\\Controllers\\ProfessorController.cs",
+              "ViewState": "AQIAACsCAAAAAAAAAAAnwEcCAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.124Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CommonController.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\CommonController.cs",
+              "RelativeDocumentMoniker": "LMS\\Controllers\\CommonController.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\CommonController.cs",
+              "RelativeToolTip": "LMS\\Controllers\\CommonController.cs",
+              "ViewState": "AQIAAOsAAAAAAAAAAAAwwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.125Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Register.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "RelativeDocumentMoniker": "LMS\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "RelativeToolTip": "LMS\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.127Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "LMS\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "LMS\\Controllers\\HomeController.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAgAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.128Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "StudentController.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\StudentController.cs",
+              "RelativeDocumentMoniker": "LMS\\Controllers\\StudentController.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Controllers\\StudentController.cs",
+              "RelativeToolTip": "LMS\\Controllers\\StudentController.cs",
+              "ViewState": "AQIAABkBAAAAAAAAAAAiwHwAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.13Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 262,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Assignment.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Assignment.cs",
+              "RelativeDocumentMoniker": "LMS\\Models\\LMSModels\\Assignment.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Assignment.cs",
+              "RelativeToolTip": "LMS\\Models\\LMSModels\\Assignment.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAA6AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.132Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AssignmentCategory.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\AssignmentCategory.cs",
+              "RelativeDocumentMoniker": "LMS\\Models\\LMSModels\\AssignmentCategory.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\AssignmentCategory.cs",
+              "RelativeToolTip": "LMS\\Models\\LMSModels\\AssignmentCategory.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.133Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Class.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Class.cs",
+              "RelativeDocumentMoniker": "LMS\\Models\\LMSModels\\Class.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Class.cs",
+              "RelativeToolTip": "LMS\\Models\\LMSModels\\Class.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.134Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "LMS\\Models\\ApplicationUser.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\ApplicationUser.cs",
+              "RelativeToolTip": "LMS\\Models\\ApplicationUser.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.136Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Administrator.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Administrator.cs",
+              "RelativeDocumentMoniker": "LMS\\Models\\LMSModels\\Administrator.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Administrator.cs",
+              "RelativeToolTip": "LMS\\Models\\LMSModels\\Administrator.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.137Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Professor.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Professor.cs",
+              "RelativeDocumentMoniker": "LMS\\Models\\LMSModels\\Professor.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Professor.cs",
+              "RelativeToolTip": "LMS\\Models\\LMSModels\\Professor.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.139Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Student.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Student.cs",
+              "RelativeDocumentMoniker": "LMS\\Models\\LMSModels\\Student.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Student.cs",
+              "RelativeToolTip": "LMS\\Models\\LMSModels\\Student.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.14Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Course.cs",
+              "DocumentMoniker": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Course.cs",
+              "RelativeDocumentMoniker": "LMS\\Models\\LMSModels\\Course.cs",
+              "ToolTip": "C:\\Users\\u1425083\\Documents\\GitHub\\LearningManagementSystem\\LMS\\Models\\LMSModels\\Course.cs",
+              "RelativeToolTip": "LMS\\Models\\LMSModels\\Course.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T22:17:12.141Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

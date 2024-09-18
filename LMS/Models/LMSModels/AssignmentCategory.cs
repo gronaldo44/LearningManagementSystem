@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace LMS.Models.LMSModels
 {
+    /// <summary>
+    /// This is Assignment Categories
+    /// It is a object on the database
+    /// </summary>
     public partial class AssignmentCategory
     {
         public AssignmentCategory()
